@@ -7,10 +7,13 @@ import 'package:example_fish_fortune/core/utils/assets.dart';
 import 'package:example_fish_fortune/core/utils/enum.dart';
 import 'package:example_fish_fortune/core/utils/helper.dart';
 import 'package:example_fish_fortune/presentation/pages/fishing/widget/fishing_topbar.dart';
+import 'package:example_fish_fortune/presentation/widgets/fish_box.dart';
 import 'package:example_fish_fortune/presentation/widgets/main_button.dart';
 import 'package:example_fish_fortune/presentation/widgets/rarity_card.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
+import 'package:svg_flutter/svg.dart';
 
 class SuccessCatch extends StatefulWidget {
   final XFile? bgCamera;
@@ -124,7 +127,7 @@ class _SuccessCatchState extends State<SuccessCatch> {
                             height: 56,
                             width: double.infinity,
                             child: MainButton(
-                              onTap: () {},
+                              onTap: _addCollectionModal,
                               bgColor1: const Color(0xffEBEBE6),
                               bgColor2: const Color(0xffB2B2B2),
                               borderWidth: 4,
@@ -191,5 +194,127 @@ class _SuccessCatchState extends State<SuccessCatch> {
 
   void _onContinue() {
     Navigator.of(context).pop();
+  }
+
+  void _addCollectionModal() {
+    showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (BuildContext context) {
+        return Center(
+          child: SizedBox(
+            height: Helper.deviceHeight(context) * 0.7,
+            width: Helper.deviceWidth(context) - 32,
+            child: Material(
+              color: Colors.transparent,
+              child: MainButton(
+                bgColor1: const Color(0xffEBEBE6),
+                bgColor2: const Color(0xffEBEBE6),
+                borderColor: const Color(0xff729CB2),
+                borderWidth: 2,
+                onTap: () {},
+                customText: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text("SELECT COLLECTION").cd16b().blackColor(),
+                          GestureDetector(
+                            onTap: () {
+                              context.pop();
+                            },
+                            child: SvgPicture.asset(Assets.icClose),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Expanded(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: 2,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 16),
+                              child: SizedBox(
+                                height: 160,
+                                width: double.infinity,
+                                child: MainButton(
+                                  bgColor1: BaseColor.white,
+                                  bgColor2: BaseColor.white,
+                                  borderWidth: 2,
+                                  onTap: () {},
+                                  customText: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(16),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child:
+                                                  const Text("FRESHWATER FISH")
+                                                      .title16()
+                                                      .blackColor(),
+                                            ),
+                                            SvgPicture.asset(Assets.icCheck),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        height: 1,
+                                        color: const Color(0xffCCCCCC),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(16),
+                                        child: GridView.builder(
+                                          shrinkWrap: true,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemCount: 4,
+                                          gridDelegate:
+                                              const SliverGridDelegateWithMaxCrossAxisExtent(
+                                            maxCrossAxisExtent: 66,
+                                            mainAxisSpacing: 8,
+                                            crossAxisSpacing: 8,
+                                            childAspectRatio: 1,
+                                          ),
+                                          itemBuilder: (context, index) {
+                                            return const FishBox(
+                                                rarity: Rarity.legend);
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      SizedBox(
+                        height: 56,
+                        width: double.infinity,
+                        child: MainButton(
+                          onTap: () {},
+                          customText: const Text("ADD TO COLLECTION")
+                              .title16()
+                              .whiteColor(),
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      const Text("CANCEL").title16().blackColor(),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }

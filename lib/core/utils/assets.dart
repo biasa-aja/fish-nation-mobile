@@ -10,6 +10,8 @@ base class Assets {
   static const String icGoogle = "assets/icons/google.svg";
   static const String icEye = "assets/icons/eye.svg";
   static const String icEyeClosed = "assets/icons/eye-closed.svg";
+  static const String icClose = "assets/icons/close.svg";
+  static const String icCheck = "assets/icons/check.svg";
 
   /// images
   static const String bgWelcome = "assets/images/bg-welcome.png";

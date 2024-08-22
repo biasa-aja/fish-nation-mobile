@@ -183,6 +183,10 @@ class _FishingPageState extends State<FishingPage> {
       }
     });
 
+    _takePicture();
+  }
+
+  void _takePicture() {
     timer = Timer.periodic(
       const Duration(seconds: 2),
       (timer) async {
@@ -377,6 +381,8 @@ class _FishingPageState extends State<FishingPage> {
       case FishingCatchState.green:
         await AudioPlayer().play(AssetSource(Assets.catchFishSound));
         await AudioPlayer().play(AssetSource(Assets.catchFish2Sound));
+        timer?.cancel();
+
         final result = await Navigator.push(
           context,
           MaterialPageRoute(
@@ -387,6 +393,7 @@ class _FishingPageState extends State<FishingPage> {
         );
 
         if (result == null) {
+          _takePicture();
           setState(() {
             fishingState = FishingState.idle;
             fishingCatchState = null;
