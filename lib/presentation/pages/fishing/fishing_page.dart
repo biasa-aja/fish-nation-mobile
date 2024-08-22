@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:camera/camera.dart';
 import 'package:example_fish_fortune/app.dart';
 import 'package:example_fish_fortune/config/themes/base_color.dart';
@@ -228,7 +230,7 @@ class _FishingPageState extends State<FishingPage> {
 
     switch (value) {
       case FishingCatchState.green:
-        Navigator.push(
+        final result = await Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => SuccessCatch(
@@ -236,6 +238,14 @@ class _FishingPageState extends State<FishingPage> {
                     rarity: Rarity.epic,
                   )),
         );
+
+        if (result == null) {
+          setState(() {
+            fishingState = FishingState.idle;
+            fishingCatchState = null;
+            // fishingGuide = FishingGuide.guide2;
+          });
+        }
         break;
       default:
     }
