@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:camera/camera.dart';
+import 'package:dio/dio.dart';
 import 'package:example_fish_fortune/app.dart';
 import 'package:example_fish_fortune/config/themes/base_color.dart';
 import 'package:example_fish_fortune/core/extensions/text_extension.dart';
@@ -12,9 +14,7 @@ import 'package:example_fish_fortune/presentation/pages/fishing/widget/fishing_t
 import 'package:example_fish_fortune/presentation/pages/fishing/widget/success_catch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
-import 'package:svg_flutter/svg.dart';
 
 class FishingPage extends StatefulWidget {
   const FishingPage({super.key});
@@ -28,6 +28,7 @@ class _FishingPageState extends State<FishingPage> {
   FishingGuide fishingGuide = FishingGuide.guide1;
   FishingState fishingState = FishingState.strike;
   FishingCatchState? fishingCatchState;
+  Timer? timer;
 
   @override
   void initState() {
@@ -41,16 +42,84 @@ class _FishingPageState extends State<FishingPage> {
       ),
     );
 
+    loadModel();
+
     cameraSetup();
   }
 
-  void cameraSetup() {
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+
+    cameraController.dispose();
+    timer?.cancel();
+  }
+
+  Future<void> loadModel() async {
+    // await Tflite.loadModel(
+    //   model: 'assets/water_detection_model_optimized.tflite',
+
+    // );
+
+    // final interpreter = await Interpreter.fromAsset(
+    //   'assets/water_detection_model_optimized.tflite',
+    // );
+  }
+
+  Future<void> processImage(CameraImage image) async {
+    final plane = image.planes[0];
+    final bytes = plane.bytes;
+    final imageSize = Size(image.width.toDouble(), image.height.toDouble());
+    // log('planes : ${image.planes.first.bytes}');
+
+    // var recognitions = await Tflite.runModelOnFrame(
+    //     bytesList: image.planes.map((plane) {
+    //       return plane.bytes;
+    //     }).toList(), // required
+    //     imageHeight: image.height,
+    //     imageWidth: image.width,
+    //     imageMean: 127.5, // defaults to 127.5
+    //     imageStd: 127.5, // defaults to 127.5
+    //     rotation: 90, // defaults to 90, Android only
+    //     numResults: 2, // defaults to 5
+    //     threshold: 0.1, // defaults to 0.1
+    //     asynch: true // defaults to true
+    //     );
+
+    // log("recognitions : $recognitions");
+  }
+
+  void waterDetection(XFile file) async {
+    String fileName = file.path.split('/').last ?? "";
+    FormData formData = FormData.fromMap({
+      "file": await MultipartFile.fromFile(file.path, filename: fileName),
+    });
+
+    final result = await Dio().post(
+      "https://1c87-2a09-bac5-d561-18be-00-277-b9.ngrok-free.app/predict",
+      data: formData,
+    );
+
+    log("results : ${result.data}");
+  }
+
+  void cameraSetup() async {
     cameraController = CameraController(cameras[0], ResolutionPreset.max);
     cameraController.initialize().then((_) {
       if (!mounted) {
         return;
       }
+
       setState(() {});
+
+      // cameraController.startImageStream((CameraImage image) {
+      //   if (!cameraController.value.isStreamingImages) {
+      //     return;
+      //   }
+      //   processImage(image);
+      //   log("is called");
+      // });
     }).catchError((Object e) {
       if (e is CameraException) {
         switch (e.code) {
@@ -63,6 +132,15 @@ class _FishingPageState extends State<FishingPage> {
         }
       }
     });
+
+    timer = Timer.periodic(
+      Duration(seconds: 2),
+      (timer) async {
+        final image = await cameraController.takePicture();
+
+        waterDetection(image);
+      },
+    );
   }
 
   @override

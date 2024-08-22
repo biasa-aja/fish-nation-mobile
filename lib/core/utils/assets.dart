@@ -41,4 +41,8 @@ base class Assets {
   static const String myticalEffect = "assets/jsons/mytical-effect.json";
   static const String rareEffect = "assets/jsons/rare-effect.json";
   static const String uncommonEffect = "assets/jsons/uncommon-effect.json";
+
+  /// tflite
+  static const String waterDetectionModel =
+      "assets/tflite/water_detection_model.tflite";
 }
