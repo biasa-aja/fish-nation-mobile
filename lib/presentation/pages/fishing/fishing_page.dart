@@ -34,6 +34,7 @@ class _FishingPageState extends State<FishingPage> {
   Timer? timer;
   StreamSubscription<GyroscopeEvent>? _gyroscopeSubscription;
   bool isWaterDetected = false;
+  XFile? takedPicture;
 
   @override
   void initState() {
@@ -186,6 +187,7 @@ class _FishingPageState extends State<FishingPage> {
       const Duration(seconds: 2),
       (timer) async {
         final image = await cameraController.takePicture();
+        takedPicture = image;
 
         waterDetection(image);
       },
@@ -356,13 +358,17 @@ class _FishingPageState extends State<FishingPage> {
       fishingState = FishingState.strike;
     });
 
+    final strike2Sound = AudioPlayer();
+
     await AudioPlayer().play(AssetSource(Assets.strikeSound));
-    await AudioPlayer().play(AssetSource(Assets.strike2Sound));
+    await strike2Sound.play(AssetSource(Assets.strike2Sound));
+
+    await Future.delayed(const Duration(seconds: 4));
+
+    strike2Sound.stop();
   }
 
   void _onCatch(FishingCatchState value) async {
-    final bgCamera = await cameraController.takePicture();
-
     setState(() {
       fishingCatchState = value;
     });
@@ -375,7 +381,7 @@ class _FishingPageState extends State<FishingPage> {
           context,
           MaterialPageRoute(
               builder: (context) => SuccessCatch(
-                    bgCamera: bgCamera,
+                    bgCamera: takedPicture,
                     rarity: Rarity.epic,
                   )),
         );

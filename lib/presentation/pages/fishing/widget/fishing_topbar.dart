@@ -1,3 +1,4 @@
+import 'package:example_fish_fortune/config/routes/route_path.dart';
 import 'package:example_fish_fortune/config/themes/base_color.dart';
 import 'package:example_fish_fortune/core/extensions/text_extension.dart';
 import 'package:example_fish_fortune/core/utils/assets.dart';
@@ -16,7 +17,7 @@ class FishingTopbar extends StatefulWidget {
 class _FishingTopbarState extends State<FishingTopbar> {
   @override
   Widget build(BuildContext context) {
-    return  Container(
+    return Container(
       alignment: Alignment.topCenter,
       width: Helper.deviceWidth(context),
       height: 180,
@@ -38,7 +39,7 @@ class _FishingTopbarState extends State<FishingTopbar> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 GestureDetector(
-                  onTap: _onTapBack,
+                  onTap: _onTapExit,
                   child: Row(
                     children: [
                       SvgPicture.asset(
@@ -71,7 +72,7 @@ class _FishingTopbarState extends State<FishingTopbar> {
     );
   }
 
-  void _onTapBack() {
-    context.pop();
+  void _onTapExit() {
+    context.go(RoutePath.home);
   }
 }

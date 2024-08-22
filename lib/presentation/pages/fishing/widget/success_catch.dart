@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 class SuccessCatch extends StatefulWidget {
-  final XFile bgCamera;
+  final XFile? bgCamera;
   final Rarity rarity;
   const SuccessCatch({super.key, required this.bgCamera, required this.rarity});
 
@@ -32,7 +32,7 @@ class _SuccessCatchState extends State<SuccessCatch> {
             SizedBox(
                 height: Helper.deviceHeight(context),
                 child: Image.file(
-                  File(widget.bgCamera.path),
+                  File(widget.bgCamera?.path ?? ""),
                   fit: BoxFit.cover,
                 )),
             Container(
