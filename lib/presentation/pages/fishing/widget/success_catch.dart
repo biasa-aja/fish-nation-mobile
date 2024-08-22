@@ -41,6 +41,7 @@ class _SuccessCatchState extends State<SuccessCatch> {
             ),
             Positioned(
               left: -(Helper.deviceWidth(context) / 2),
+              top: -80,
               child: Lottie.asset(
                 Assets.epicEffect,
                 fit: BoxFit.cover,
