@@ -119,7 +119,7 @@ class _FishingPageState extends State<FishingPage> {
     });
 
     final result = await Dio().post(
-      "https://6aed-2a09-bac5-d561-18be-00-277-b9.ngrok-free.app/predict",
+      "https://984b-2a09-bac5-d561-18be-00-277-b9.ngrok-free.app/predict",
       data: formData,
     );
 
