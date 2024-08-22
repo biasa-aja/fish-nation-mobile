@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:math' as math;
 
 import 'package:camera/camera.dart';
 import 'package:dio/dio.dart';
@@ -15,6 +16,7 @@ import 'package:example_fish_fortune/presentation/pages/fishing/widget/success_c
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
+import 'package:sensors_plus/sensors_plus.dart';
 
 class FishingPage extends StatefulWidget {
   const FishingPage({super.key});
@@ -26,9 +28,11 @@ class FishingPage extends StatefulWidget {
 class _FishingPageState extends State<FishingPage> {
   late CameraController cameraController;
   FishingGuide fishingGuide = FishingGuide.guide1;
-  FishingState fishingState = FishingState.strike;
+  FishingState fishingState = FishingState.idle;
   FishingCatchState? fishingCatchState;
   Timer? timer;
+  StreamSubscription<GyroscopeEvent>? _gyroscopeSubscription;
+  bool isWaterDetected = false;
 
   @override
   void initState() {
@@ -54,6 +58,7 @@ class _FishingPageState extends State<FishingPage> {
 
     cameraController.dispose();
     timer?.cancel();
+    _gyroscopeSubscription?.cancel();
   }
 
   Future<void> loadModel() async {
@@ -65,6 +70,21 @@ class _FishingPageState extends State<FishingPage> {
     // final interpreter = await Interpreter.fromAsset(
     //   'assets/water_detection_model_optimized.tflite',
     // );
+  }
+
+  void listenToGyroscope() {
+    _gyroscopeSubscription =
+        gyroscopeEventStream().listen((GyroscopeEvent event) async {
+      if (event.x < -1.5 && fishingState == FishingState.idle) {
+        // Adjust the threshold value based on your needs
+        setState(() {
+          fishingState = FishingState.fishing;
+        });
+        _gyroscopeSubscription?.pause();
+
+        _delayForStrike();
+      }
+    });
   }
 
   Future<void> processImage(CameraImage image) async {
@@ -91,7 +111,7 @@ class _FishingPageState extends State<FishingPage> {
   }
 
   void waterDetection(XFile file) async {
-    String fileName = file.path.split('/').last ?? "";
+    String fileName = file.path.split('/').last;
     FormData formData = FormData.fromMap({
       "file": await MultipartFile.fromFile(file.path, filename: fileName),
     });
@@ -101,7 +121,34 @@ class _FishingPageState extends State<FishingPage> {
       data: formData,
     );
 
-    log("results : ${result.data}");
+    final isWaterDetected = result.data["water_detected"];
+
+    setState(() {
+      this.isWaterDetected = isWaterDetected;
+    });
+
+    if (isWaterDetected && fishingState != FishingState.idle) {
+      return;
+    }
+
+    if (isWaterDetected) {
+      setState(() {
+        fishingGuide = FishingGuide.guide2;
+        fishingState = FishingState.idle;
+      });
+
+      if (_gyroscopeSubscription != null) {
+        _gyroscopeSubscription?.resume();
+      } else {
+        listenToGyroscope();
+      }
+      return;
+    }
+
+    setState(() {
+      fishingGuide = FishingGuide.guide1;
+      fishingState = FishingState.idle;
+    });
   }
 
   void cameraSetup() async {
@@ -134,7 +181,7 @@ class _FishingPageState extends State<FishingPage> {
     });
 
     timer = Timer.periodic(
-      Duration(seconds: 2),
+      const Duration(seconds: 2),
       (timer) async {
         final image = await cameraController.takePicture();
 
@@ -200,7 +247,7 @@ class _FishingPageState extends State<FishingPage> {
                 if (fishingState == FishingState.strike &&
                     fishingCatchState == null)
                   Image.asset(Assets.strike)
-                else if (fishingState == FishingState.strike &&
+                else if (fishingState == FishingState.fishing &&
                     fishingCatchState == FishingCatchState.yellow)
                   Image.asset(Assets.tryAgain)
               ],
@@ -299,6 +346,15 @@ class _FishingPageState extends State<FishingPage> {
     );
   }
 
+  void _delayForStrike() async {
+    await Future.delayed(
+        Duration(seconds: math.Random.secure().nextInt(1) + 5));
+
+    setState(() {
+      fishingState = FishingState.strike;
+    });
+  }
+
   void _onCatch(FishingCatchState value) async {
     final bgCamera = await cameraController.takePicture();
 
@@ -325,7 +381,18 @@ class _FishingPageState extends State<FishingPage> {
           });
         }
         break;
-      default:
+      case FishingCatchState.yellow:
+        setState(() {
+          fishingState = FishingState.fishing;
+        });
+
+        _delayForStrike();
+      case FishingCatchState.red:
+        setState(() {
+          fishingState = FishingState.idle;
+          fishingGuide =
+              isWaterDetected ? FishingGuide.guide2 : FishingGuide.guide1;
+        });
     }
   }
 }
