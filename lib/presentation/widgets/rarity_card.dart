@@ -6,7 +6,13 @@ import 'package:flutter/material.dart';
 
 class RarityCard extends StatelessWidget {
   final Rarity rarity;
-  const RarityCard({super.key, required this.rarity});
+  final Color borderColor;
+
+  const RarityCard({
+    super.key,
+    required this.rarity,
+    this.borderColor = const Color(0xff1A170B),
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +22,7 @@ class RarityCard extends StatelessWidget {
       child: MainButton(
         bgColor1: bgColor1,
         bgColor2: bgColor2,
+        borderColor: borderColor,
         borderWidth: 1,
         onTap: () {},
         customText: Text(rarity.title).cd14b().whiteColor(),

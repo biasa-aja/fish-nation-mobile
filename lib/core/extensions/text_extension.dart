@@ -40,6 +40,14 @@ extension TextExtension on Text {
         ),
       );
 
+  Text cd20b() => copyWith(
+        style: const TextStyle(
+          fontFamily: Constant.CLASH_DISPLAY,
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
+        ),
+      );
+
   Text cd16b() => copyWith(
         style: const TextStyle(
           fontFamily: Constant.CLASH_DISPLAY,

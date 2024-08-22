@@ -6,6 +6,8 @@ import 'package:example_fish_fortune/core/utils/assets.dart';
 import 'package:example_fish_fortune/core/utils/enum.dart';
 import 'package:example_fish_fortune/core/utils/helper.dart';
 import 'package:example_fish_fortune/presentation/pages/fishing/widget/fishing_slider.dart';
+import 'package:example_fish_fortune/presentation/pages/fishing/widget/fishing_topbar.dart';
+import 'package:example_fish_fortune/presentation/pages/fishing/widget/success_catch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -83,68 +85,12 @@ class _FishingPageState extends State<FishingPage> {
             left: 0,
             child: _buildFishRoad(),
           ),
-          Positioned(
+          const Positioned(
             top: 0,
             left: 0,
-            child: _buildTopBar(),
+            child: FishingTopbar(),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildTopBar() {
-    return Container(
-      alignment: Alignment.topCenter,
-      width: Helper.deviceWidth(context),
-      height: 180,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            BaseColor.black.withOpacity(0.6),
-            BaseColor.black.withOpacity(0.0),
-          ],
-        ),
-      ),
-      child: SafeArea(
-        child: SizedBox(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: _onTapBack,
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(
-                        Assets.icChevronLeft,
-                        colorFilter: const ColorFilter.mode(
-                          BaseColor.white,
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      const Text("Exit").gs16m().whiteColor(),
-                    ],
-                  ),
-                ),
-                Row(
-                  children: [
-                    SizedBox(
-                      height: 28,
-                      child: Image.asset(Assets.energy2),
-                    ),
-                    const SizedBox(width: 12),
-                    const Text("5").title18().whiteColor(),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -273,11 +219,25 @@ class _FishingPageState extends State<FishingPage> {
     );
   }
 
-  void _onCatch(FishingCatchState value) {
-    
-  }
+  void _onCatch(FishingCatchState value) async {
+    final bgCamera = await cameraController.takePicture();
 
-  void _onTapBack() {
-    context.pop();
+    setState(() {
+      fishingCatchState = value;
+    });
+
+    switch (value) {
+      case FishingCatchState.green:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => SuccessCatch(
+                    bgCamera: bgCamera,
+                    rarity: Rarity.epic,
+                  )),
+        );
+        break;
+      default:
+    }
   }
 }

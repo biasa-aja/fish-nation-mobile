@@ -39,6 +39,7 @@ class MainButton extends StatelessWidget {
                 height: height,
                 width: width - borderWidth * 2 * 2,
                 decoration: BoxDecoration(
+                  color: Colors.transparent,
                   border: Border(
                     top: BorderSide(
                       width: borderWidth,
