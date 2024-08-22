@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:audioplayers/audioplayers.dart';
 import 'package:example_fish_fortune/config/routes/route_path.dart';
 import 'package:example_fish_fortune/core/extensions/text_extension.dart';
 import 'package:example_fish_fortune/core/utils/assets.dart';
@@ -162,7 +165,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _onStartFishing() {
+  void _onStartFishing() async {
     context.push(RoutePath.fishing);
   }
 }

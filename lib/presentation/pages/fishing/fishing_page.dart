@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:math' as math;
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:camera/camera.dart';
 import 'package:dio/dio.dart';
 import 'package:example_fish_fortune/app.dart';
@@ -77,6 +78,7 @@ class _FishingPageState extends State<FishingPage> {
         gyroscopeEventStream().listen((GyroscopeEvent event) async {
       if (event.x < -1.5 && fishingState == FishingState.idle) {
         // Adjust the threshold value based on your needs
+        await AudioPlayer().play(AssetSource(Assets.throwFishRodSound));
         setState(() {
           fishingState = FishingState.fishing;
         });
@@ -117,7 +119,7 @@ class _FishingPageState extends State<FishingPage> {
     });
 
     final result = await Dio().post(
-      "https://1c87-2a09-bac5-d561-18be-00-277-b9.ngrok-free.app/predict",
+      "https://6aed-2a09-bac5-d561-18be-00-277-b9.ngrok-free.app/predict",
       data: formData,
     );
 
@@ -353,6 +355,9 @@ class _FishingPageState extends State<FishingPage> {
     setState(() {
       fishingState = FishingState.strike;
     });
+
+    await AudioPlayer().play(AssetSource(Assets.strikeSound));
+    await AudioPlayer().play(AssetSource(Assets.strike2Sound));
   }
 
   void _onCatch(FishingCatchState value) async {
@@ -364,6 +369,8 @@ class _FishingPageState extends State<FishingPage> {
 
     switch (value) {
       case FishingCatchState.green:
+        await AudioPlayer().play(AssetSource(Assets.catchFishSound));
+        await AudioPlayer().play(AssetSource(Assets.catchFish2Sound));
         final result = await Navigator.push(
           context,
           MaterialPageRoute(

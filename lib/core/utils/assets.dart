@@ -45,4 +45,11 @@ base class Assets {
   /// tflite
   static const String waterDetectionModel =
       "assets/tflite/water_detection_model.tflite";
+
+  /// audios
+  static const String catchFishSound = "audios/catch-fish.mp3";
+  static const String catchFish2Sound = "audios/catch-fish-2.mp3";
+  static const String strikeSound = "audios/strike.mp3";
+  static const String strike2Sound = "audios/strike-2.mp3";
+  static const String throwFishRodSound = "audios/thow-fish-rod.mp3";
 }
