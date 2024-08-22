@@ -209,7 +209,7 @@ class _FishingPageState extends State<FishingPage> {
               Lottie.asset(Assets.iphoneLottie),
               const SizedBox(height: 16),
               const Text(
-                "SWING PHONE DOWN TO STAT FISHING",
+                "SWING PHONE DOWN TO START FISHING",
                 textAlign: TextAlign.center,
               ).title16().whiteColor(),
             ],

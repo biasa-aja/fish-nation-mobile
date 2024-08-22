@@ -41,7 +41,7 @@ class _SuccessCatchState extends State<SuccessCatch> {
             ),
             Positioned(
               left: -(Helper.deviceWidth(context) / 2),
-              top: -80,
+              top: -110,
               child: Lottie.asset(
                 Assets.epicEffect,
                 fit: BoxFit.cover,
@@ -170,7 +170,12 @@ class _SuccessCatchState extends State<SuccessCatch> {
                             ),
                           ),
                           const SizedBox(height: 24),
-                          const Text("CONTINUE FISHING").title16().whiteColor(),
+                          GestureDetector(
+                            onTap: _onContinue,
+                            child: const Text("CONTINUE FISHING")
+                                .title16()
+                                .whiteColor(),
+                          ),
                         ],
                       ),
                     ),
@@ -182,5 +187,9 @@ class _SuccessCatchState extends State<SuccessCatch> {
         ),
       ),
     );
+  }
+
+  void _onContinue() {
+    Navigator.of(context).pop();
   }
 }
