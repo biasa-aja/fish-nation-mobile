@@ -4,6 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:example_fish_fortune/config/routes/route_path.dart';
 import 'package:example_fish_fortune/core/extensions/text_extension.dart';
 import 'package:example_fish_fortune/core/utils/assets.dart';
+import 'package:example_fish_fortune/core/utils/constant.dart';
 import 'package:example_fish_fortune/presentation/pages/home/cubit/recent_list_cubit.dart';
 import 'package:example_fish_fortune/presentation/pages/home/widget/challenge_list_tile.dart';
 import 'package:example_fish_fortune/presentation/pages/home/widget/recent_list_tile.dart';
@@ -196,6 +197,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onStartFishing() async {
-    context.push(RoutePath.fishing);
+    final result = await context.push(RoutePath.fishing);
+
+    if (result == Constant.RELOAD) {
+      _onRefresh();
+    }
   }
 }

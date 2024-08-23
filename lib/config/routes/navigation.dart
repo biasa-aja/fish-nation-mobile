@@ -49,6 +49,9 @@ class Navigation {
         GoRoute(
           path: RoutePath.home,
           pageBuilder: (context, GoRouterState state) {
+            final extra = state.extra as Map<String, dynamic>?;
+        final isReload = extra?["isReload"];
+
             return _getPage(
               child: MultiProvider(
                 providers: [
