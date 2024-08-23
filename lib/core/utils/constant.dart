@@ -8,6 +8,6 @@ base class Constant {
   static const String CLASH_DISPLAY = "ClashDisplay";
   static const String APP_NAME = "FISHNATION";
   static const String BASE_URL =
-      "https://h5avv-gyaaa-aaaap-qhtkq-cai.raw.icp0.io";
+      "https://g6m4t-saaaa-aaaap-qhtma-cai.raw.icp0.io";
   static const String TOKEN_AUTH_DEFAULT = "123abc-defgh";
 }
