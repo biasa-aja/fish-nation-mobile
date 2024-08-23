@@ -11,6 +11,8 @@ import 'package:example_fish_fortune/core/extensions/text_extension.dart';
 import 'package:example_fish_fortune/core/utils/assets.dart';
 import 'package:example_fish_fortune/core/utils/enum.dart';
 import 'package:example_fish_fortune/core/utils/helper.dart';
+import 'package:example_fish_fortune/data/data_sources/remote/fishing_api.dart';
+import 'package:example_fish_fortune/data/models/droprate_response.dart';
 import 'package:example_fish_fortune/presentation/pages/fishing/widget/fishing_slider.dart';
 import 'package:example_fish_fortune/presentation/pages/fishing/widget/fishing_topbar.dart';
 import 'package:example_fish_fortune/presentation/pages/fishing/widget/success_catch.dart';
@@ -27,6 +29,7 @@ class FishingPage extends StatefulWidget {
 }
 
 class _FishingPageState extends State<FishingPage> {
+  final fishingApi = FishingApi();
   late CameraController cameraController;
   FishingGuide fishingGuide = FishingGuide.guide1;
   FishingState fishingState = FishingState.idle;
@@ -35,6 +38,8 @@ class _FishingPageState extends State<FishingPage> {
   StreamSubscription<GyroscopeEvent>? _gyroscopeSubscription;
   bool isWaterDetected = false;
   XFile? takedPicture;
+
+  DroprateResponse? droprateResponse;
 
   @override
   void initState() {
@@ -355,6 +360,12 @@ class _FishingPageState extends State<FishingPage> {
   }
 
   void _delayForStrike() async {
+    final response = await fishingApi.getDropRate();
+
+    if (response != null) {
+      droprateResponse = response;
+    }
+
     await Future.delayed(
         Duration(seconds: math.Random.secure().nextInt(1) + 5));
 
@@ -381,19 +392,21 @@ class _FishingPageState extends State<FishingPage> {
       case FishingCatchState.green:
         await AudioPlayer().play(AssetSource(Assets.catchFishSound));
         await AudioPlayer().play(AssetSource(Assets.catchFish2Sound));
-        timer?.cancel();
+        // timer?.cancel();
+
+        log("droprateResponse : ${droprateResponse}");
 
         final result = await Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => SuccessCatch(
                     bgCamera: takedPicture,
-                    rarity: Rarity.epic,
+                    droprateResponse: droprateResponse,
                   )),
         );
 
         if (result == null) {
-          _takePicture();
+          // _takePicture();
           setState(() {
             fishingState = FishingState.idle;
             fishingCatchState = null;

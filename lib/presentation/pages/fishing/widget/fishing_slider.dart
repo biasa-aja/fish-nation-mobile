@@ -20,7 +20,7 @@ class FishingSlider extends StatefulWidget {
 
 class _FishingSliderState extends State<FishingSlider> {
   final modalKey = GlobalKey<State>();
-  double stopperPosition = 0.5; // Initial position (center)
+  double stopperPosition = 0.1; // Initial position (center)
   bool isMovingRight = true;
   Timer? timer;
   StreamSubscription<GyroscopeEvent>? _gyroscopeSubscription;

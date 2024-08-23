@@ -1,11 +1,14 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:camera/camera.dart';
 import 'package:example_fish_fortune/config/themes/base_color.dart';
+import 'package:example_fish_fortune/core/extensions/all_extensions.dart';
 import 'package:example_fish_fortune/core/extensions/text_extension.dart';
 import 'package:example_fish_fortune/core/utils/assets.dart';
 import 'package:example_fish_fortune/core/utils/enum.dart';
 import 'package:example_fish_fortune/core/utils/helper.dart';
+import 'package:example_fish_fortune/data/models/droprate_response.dart';
 import 'package:example_fish_fortune/presentation/pages/fishing/widget/fishing_topbar.dart';
 import 'package:example_fish_fortune/presentation/widgets/fish_box.dart';
 import 'package:example_fish_fortune/presentation/widgets/main_button.dart';
@@ -17,14 +20,21 @@ import 'package:svg_flutter/svg.dart';
 
 class SuccessCatch extends StatefulWidget {
   final XFile? bgCamera;
-  final Rarity rarity;
-  const SuccessCatch({super.key, required this.bgCamera, required this.rarity});
+  final DroprateResponse? droprateResponse;
+  const SuccessCatch(
+      {super.key, required this.bgCamera, this.droprateResponse});
 
   @override
   State<SuccessCatch> createState() => _SuccessCatchState();
 }
 
 class _SuccessCatchState extends State<SuccessCatch> {
+  Rarity? get rarity =>
+      widget.droprateResponse?.attributes?.rarity?.parseToRarity();
+  String get title => widget.droprateResponse?.title ?? "";
+  String get imgUrl => widget.droprateResponse?.imgUrl ?? "";
+  num get height => widget.droprateResponse?.attributes?.height ?? 0;
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -46,7 +56,7 @@ class _SuccessCatchState extends State<SuccessCatch> {
               left: -(Helper.deviceWidth(context) / 2),
               top: -110,
               child: Lottie.asset(
-                Assets.epicEffect,
+                lottie(),
                 fit: BoxFit.cover,
                 height: Helper.deviceHeight(context),
                 width: Helper.deviceWidth(context),
@@ -70,11 +80,24 @@ class _SuccessCatchState extends State<SuccessCatch> {
                             textAlign: TextAlign.center,
                           ).heading4().whiteColor(),
                           const SizedBox(height: 24),
-                          Image.asset(
-                            Assets.fishCatched,
+                          CachedNetworkImage(
+                            imageUrl: imgUrl,
+                            placeholder: (context, url) => SizedBox.square(
+                              dimension: 200,
+                              child: Image.asset(Assets.fish),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                SizedBox.square(
+                              dimension: 200,
+                              child: Image.asset(Assets.fish),
+                            ),
+                            fadeInDuration: Duration.zero,
+                            fadeOutDuration: Duration.zero,
+                            fit: BoxFit.cover,
+                            height: 200,
                             width: 200,
                           ),
-                          const Text("TUNA BLUE").cd20b().whiteColor(),
+                          Text(title).cd20b().whiteColor(),
                           const SizedBox(height: 16),
                           Row(
                             mainAxisSize: MainAxisSize.min,
@@ -88,16 +111,16 @@ class _SuccessCatchState extends State<SuccessCatch> {
                                   bgColor2: Colors.transparent,
                                   borderColor: BaseColor.white,
                                   borderWidth: 1,
-                                  customText: const Text("58 CM")
-                                      .title14()
-                                      .whiteColor(),
+                                  customText:
+                                      Text("$height CM").title14().whiteColor(),
                                 ),
                               ),
                               const SizedBox(width: 8),
-                              RarityCard(
-                                rarity: widget.rarity,
-                                borderColor: BaseColor.white,
-                              ),
+                              if (rarity != null)
+                                RarityCard(
+                                  rarity: rarity!,
+                                  borderColor: BaseColor.white,
+                                ),
                             ],
                           ),
                           const SizedBox(height: 24),
@@ -316,5 +339,22 @@ class _SuccessCatchState extends State<SuccessCatch> {
         );
       },
     );
+  }
+
+  String lottie() {
+    switch (rarity) {
+      case Rarity.mytical:
+        return Assets.myticalEffect;
+      case Rarity.legend:
+        return Assets.legendEffect;
+      case Rarity.epic:
+        return Assets.epicEffect;
+      case Rarity.rare:
+        return Assets.rareEffect;
+      case Rarity.uncommon:
+        return Assets.uncommonEffect;
+      default:
+        return Assets.commonEffect;
+    }
   }
 }
