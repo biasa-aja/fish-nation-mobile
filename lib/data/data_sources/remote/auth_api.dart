@@ -36,11 +36,11 @@ class AuthApi {
 
   Future<DetailProfileResponse?> detailProfile({String? address}) async {
     try {
-      final response = await _dio.post(
+      final response = await _dio.get(
         "${Constant.BASE_URL}/auth/v1/detailUser",
         options: Options(
           headers: {
-            "address": address,
+            "Authorization": address,
           },
         ),
       );
