@@ -34,6 +34,7 @@ class _SuccessCatchState extends State<SuccessCatch> {
   String get title => widget.droprateResponse?.title ?? "";
   String get imgUrl => widget.droprateResponse?.imgUrl ?? "";
   num get height => widget.droprateResponse?.attributes?.height ?? 0;
+  num get price => widget.droprateResponse?.attributes?.price ?? 0;
 
   @override
   Widget build(BuildContext context) {
@@ -187,9 +188,10 @@ class _SuccessCatchState extends State<SuccessCatch> {
                                     child: Image.asset(Assets.coin),
                                   ),
                                   const SizedBox(width: 8),
-                                  const Text(
-                                    "SELL FOR 40",
-                                    style: TextStyle(color: Color(0xffDE813D)),
+                                  Text(
+                                    "SELL FOR $price",
+                                    style: const TextStyle(
+                                        color: Color(0xffDE813D)),
                                   ).title16(),
                                 ],
                               ),
