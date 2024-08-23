@@ -2,6 +2,7 @@ import 'package:example_fish_fortune/config/routes/bottom_navigation_page.dart';
 import 'package:example_fish_fortune/config/routes/route_path.dart';
 import 'package:example_fish_fortune/presentation/pages/collection/collection_page.dart';
 import 'package:example_fish_fortune/presentation/pages/fishing/fishing_page.dart';
+import 'package:example_fish_fortune/presentation/pages/home/cubit/recent_list_cubit.dart';
 import 'package:example_fish_fortune/presentation/pages/home/home_page.dart';
 import 'package:example_fish_fortune/presentation/pages/login/login_page.dart';
 import 'package:example_fish_fortune/presentation/pages/profile/profile_page.dart';
@@ -10,7 +11,9 @@ import 'package:example_fish_fortune/presentation/pages/register/register_page.d
 import 'package:example_fish_fortune/presentation/pages/shop/shop_page.dart';
 import 'package:example_fish_fortune/presentation/pages/welcome/welcome_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class Navigation {
   static final GlobalKey<NavigatorState> baseNavigatorKey =
@@ -47,7 +50,14 @@ class Navigation {
           path: RoutePath.home,
           pageBuilder: (context, GoRouterState state) {
             return _getPage(
-              child: const HomePage(),
+              child: MultiProvider(
+                providers: [
+                  BlocProvider(
+                    create: (context) => RecentListCubit(),
+                  )
+                ],
+                child: const HomePage(),
+              ),
               state: state,
             );
           },

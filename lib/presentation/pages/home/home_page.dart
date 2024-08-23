@@ -4,6 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:example_fish_fortune/config/routes/route_path.dart';
 import 'package:example_fish_fortune/core/extensions/text_extension.dart';
 import 'package:example_fish_fortune/core/utils/assets.dart';
+import 'package:example_fish_fortune/presentation/pages/home/cubit/recent_list_cubit.dart';
 import 'package:example_fish_fortune/presentation/pages/home/widget/challenge_list_tile.dart';
 import 'package:example_fish_fortune/presentation/pages/home/widget/recent_list_tile.dart';
 import 'package:example_fish_fortune/presentation/widgets/avatar.dart';
@@ -11,6 +12,7 @@ import 'package:example_fish_fortune/presentation/widgets/main_button.dart';
 import 'package:example_fish_fortune/presentation/widgets/topbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:svg_flutter/svg.dart';
 
@@ -111,14 +113,18 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         const SizedBox(height: 16),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: 3,
-          itemBuilder: (context, index) {
-            return const Padding(
-              padding: EdgeInsets.only(bottom: 16),
-              child: RecentListTile(),
+        BlocBuilder<RecentListCubit, RecentListState>(
+          builder: (context, state) {
+            return ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: 3,
+              itemBuilder: (context, index) {
+                return const Padding(
+                  padding: EdgeInsets.only(bottom: 16),
+                  child: RecentListTile(),
+                );
+              },
             );
           },
         ),
