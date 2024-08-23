@@ -301,15 +301,15 @@ BottomNavigationBarThemeData _bottomNavigationBarThemeData =
 );
 
 TabBarTheme _tabBarTheme = TabBarTheme(
-  labelColor: BaseColor.text,
+  labelColor: BaseColor.primary,
   indicatorColor: BaseColor.primary,
-  unselectedLabelColor: BaseColor.text,
-  dividerColor: const Color(0xffF3F3F3),
-  dividerHeight: 3,
+  unselectedLabelColor: const Color(0xffAAAAAA),
+  dividerColor: const Color(0xffDEDEDE),
+  dividerHeight: 4,
   indicatorSize: TabBarIndicatorSize.tab,
   indicator: const UnderlineTabIndicator(
     // color for indicator (underline)
-    borderSide: BorderSide(color: BaseColor.primary, width: 3),
+    borderSide: BorderSide(color: BaseColor.primary, width: 4),
   ),
   overlayColor: WidgetStateProperty.resolveWith<Color>(
     (Set<WidgetState> states) {
@@ -325,14 +325,16 @@ TabBarTheme _tabBarTheme = TabBarTheme(
     },
   ),
   labelStyle: const TextStyle(
+    fontFamily: Constant.CLASH_DISPLAY,
     fontSize: 16,
     fontWeight: FontWeight.w700,
-    color: BaseColor.text,
+    color: BaseColor.primary,
   ),
   unselectedLabelStyle: const TextStyle(
+    fontFamily: Constant.CLASH_DISPLAY,
     fontSize: 16,
     fontWeight: FontWeight.w700,
-    color: BaseColor.text,
+    color: Color(0xffAAAAAA),
   ),
 );
 
