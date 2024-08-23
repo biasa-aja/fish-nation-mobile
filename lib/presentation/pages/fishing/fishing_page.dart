@@ -124,7 +124,16 @@ class _FishingPageState extends State<FishingPage> {
       "file": await MultipartFile.fromFile(file.path, filename: fileName),
     });
 
-    final result = await Dio().post(
+    final result = await Dio(
+      BaseOptions(
+        connectTimeout: const Duration(seconds: 100),
+        receiveTimeout: const Duration(seconds: 100),
+        sendTimeout: const Duration(seconds: 100),
+        validateStatus: (status) {
+          return status != null && status < 500;
+        },
+      ),
+    ).post(
       "https://984b-2a09-bac5-d561-18be-00-277-b9.ngrok-free.app/predict",
       data: formData,
     );
