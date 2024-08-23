@@ -25,27 +25,39 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _onRefresh();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const Topbar(),
-              const SizedBox(height: 12),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  children: [
-                    _buildStartButton(),
-                    const SizedBox(height: 24),
-                    _buildRecent(),
-                    const SizedBox(height: 24),
-                    _buildChallenges(),
-                  ],
+        child: RefreshIndicator(
+          onRefresh: _onRefresh,
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Column(
+              children: [
+                const Topbar(),
+                const SizedBox(height: 12),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    children: [
+                      _buildStartButton(),
+                      const SizedBox(height: 24),
+                      _buildRecent(),
+                      const SizedBox(height: 24),
+                      _buildChallenges(),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -115,16 +127,24 @@ class _HomePageState extends State<HomePage> {
         const SizedBox(height: 16),
         BlocBuilder<RecentListCubit, RecentListState>(
           builder: (context, state) {
-            return ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: 3,
-              itemBuilder: (context, index) {
-                return const Padding(
-                  padding: EdgeInsets.only(bottom: 16),
-                  child: RecentListTile(),
+            return state.when(
+              loading: () => const Center(
+                child: CircularProgressIndicator(),
+              ),
+              success: (data) {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: data.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: RecentListTile(model: data[index]),
+                    );
+                  },
                 );
               },
+              failure: () => const SizedBox(),
             );
           },
         ),
@@ -169,6 +189,10 @@ class _HomePageState extends State<HomePage> {
         ),
       ],
     );
+  }
+
+  Future<void> _onRefresh() async {
+    context.read<RecentListCubit>().getAll();
   }
 
   void _onStartFishing() async {

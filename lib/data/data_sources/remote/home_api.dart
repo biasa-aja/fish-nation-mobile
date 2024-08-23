@@ -9,8 +9,8 @@ class HomeApi {
 
   Future<List<RecentItemResponse>> getRecentList() async {
     try {
-      final response = await _dio.post(
-        "https://h3d56-kaaaa-aaaag-qkfqq-cai.raw.icp0.io/collection/v1/recent",
+      final response = await _dio.get(
+        "${Constant.BASE_URL}/recent/v1",
         options: Options(
           headers: {
             "address": Constant.TOKEN_AUTH_DEFAULT,

@@ -1,20 +1,29 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:example_fish_fortune/config/themes/base_color.dart';
+import 'package:example_fish_fortune/core/extensions/all_extensions.dart';
 import 'package:example_fish_fortune/core/extensions/text_extension.dart';
 import 'package:example_fish_fortune/core/utils/assets.dart';
 import 'package:example_fish_fortune/core/utils/enum.dart';
+import 'package:example_fish_fortune/data/models/recent_item_response.dart';
 import 'package:example_fish_fortune/presentation/widgets/main_button.dart';
 import 'package:example_fish_fortune/presentation/widgets/rarity_card.dart';
 import 'package:flutter/material.dart';
 
 class RecentListTile extends StatefulWidget {
-  const RecentListTile({super.key});
+  final RecentItemResponse? model;
+  const RecentListTile({super.key, this.model});
 
   @override
   State<RecentListTile> createState() => _RecentListTileState();
 }
 
 class _RecentListTileState extends State<RecentListTile> {
+  String get imageUrl => widget.model?.imgUrl ?? "";
+  String get title => widget.model?.title ?? "";
+  num get height => widget.model?.height ?? 0;
+  Rarity? get rarity => widget.model?.rarity?.parseToRarity();
+  num get price => widget.model?.price ?? 0;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -32,7 +41,7 @@ class _RecentListTileState extends State<RecentListTile> {
               child: Row(
                 children: [
                   CachedNetworkImage(
-                    imageUrl: "",
+                    imageUrl: imageUrl,
                     placeholder: (context, url) => SizedBox.square(
                       dimension: 48,
                       child: Image.asset(Assets.fish),
@@ -51,16 +60,16 @@ class _RecentListTileState extends State<RecentListTile> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text("EL MUJAER").title16().blackColor(),
+                      Text(title).title16().blackColor(),
                       Text(
-                        "12 CM",
+                        "$height CM",
                         style:
                             TextStyle(color: BaseColor.black.withOpacity(0.8)),
                       ).gs14m(),
                     ],
                   ),
                   const Spacer(),
-                  const RarityCard(rarity: Rarity.mytical),
+                  if (rarity != null) RarityCard(rarity: rarity!),
                 ],
               ),
             ),
@@ -88,9 +97,10 @@ class _RecentListTileState extends State<RecentListTile> {
                               child: Image.asset(Assets.coin),
                             ),
                             const SizedBox(width: 8),
-                            const Text(
-                              "100",
-                              style: TextStyle(color: Color(0xffDE813D)),
+                            Text(
+                              "$price",
+                              style: const TextStyle(
+                                  color: const Color(0xffDE813D)),
                             ).title14()
                           ],
                         ),
