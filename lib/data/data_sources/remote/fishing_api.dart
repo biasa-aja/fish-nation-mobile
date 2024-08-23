@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:example_fish_fortune/core/utils/constant.dart';
+import 'package:example_fish_fortune/data/data_sources/local/shared_pref.dart';
 import 'package:example_fish_fortune/data/models/droprate_response.dart';
 
 class FishingApi {
@@ -13,7 +14,7 @@ class FishingApi {
         "${Constant.BASE_URL}/fishing/v1",
         options: Options(
           headers: {
-            "address": Constant.TOKEN_AUTH_DEFAULT,
+            "address": SharedPref.detailProfileResponse?.address,
           },
         ),
       );
