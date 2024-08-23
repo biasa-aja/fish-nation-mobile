@@ -8,6 +8,7 @@ import 'package:example_fish_fortune/core/utils/constant.dart';
 import 'package:example_fish_fortune/presentation/pages/home/cubit/recent_list_cubit.dart';
 import 'package:example_fish_fortune/presentation/pages/home/widget/challenge_list_tile.dart';
 import 'package:example_fish_fortune/presentation/pages/home/widget/recent_list_tile.dart';
+import 'package:example_fish_fortune/presentation/provider/profile_provider.dart';
 import 'package:example_fish_fortune/presentation/widgets/avatar.dart';
 import 'package:example_fish_fortune/presentation/widgets/main_button.dart';
 import 'package:example_fish_fortune/presentation/widgets/topbar.dart';
@@ -31,6 +32,8 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     _onRefresh();
+
+    context.read<ProfileProvider>().reload();
   }
 
   @override

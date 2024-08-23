@@ -3,11 +3,13 @@ import 'package:example_fish_fortune/config/routes/navigation.dart';
 import 'package:example_fish_fortune/config/themes/base_color.dart';
 import 'package:example_fish_fortune/config/themes/light_theme.dart';
 import 'package:example_fish_fortune/data/data_sources/local/shared_pref.dart';
+import 'package:example_fish_fortune/presentation/provider/profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:provider/provider.dart';
 
- List<CameraDescription> cameras = [];
+List<CameraDescription> cameras = [];
 
 Future<Widget> initilizeApp() async {
   // SystemChrome.setSystemUIOverlayStyle(
@@ -44,10 +46,17 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      theme: lightTheme(),
-      routerConfig: Navigation.router,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => ProfileProvider(),
+        ),
+      ],
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        theme: lightTheme(),
+        routerConfig: Navigation.router,
+      ),
     );
   }
 }
