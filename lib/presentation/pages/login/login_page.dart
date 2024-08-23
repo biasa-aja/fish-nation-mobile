@@ -1,5 +1,9 @@
 import 'package:example_fish_fortune/config/routes/route_path.dart';
 import 'package:example_fish_fortune/core/extensions/text_extension.dart';
+import 'package:example_fish_fortune/core/utils/enum.dart';
+import 'package:example_fish_fortune/core/utils/message.dart';
+import 'package:example_fish_fortune/core/utils/modal.dart';
+import 'package:example_fish_fortune/data/data_sources/remote/auth_api.dart';
 import 'package:example_fish_fortune/presentation/widgets/metamask_button.dart';
 import 'package:example_fish_fortune/presentation/widgets/custom_appbar.dart';
 import 'package:example_fish_fortune/presentation/widgets/custom_text_form_field.dart';
@@ -17,8 +21,11 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  static final keyLoader = GlobalKey<State>();
+  final formKey = GlobalKey<FormState>();
+
+  final usernameController = TextEditingController();
+  final addressController = TextEditingController();
 
   @override
   void initState() {
@@ -123,28 +130,53 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildForm() {
-    return Column(
-      children: [
-        CustomTextFormField(
-          labelText: "EMAIL",
-          controller: emailController,
-          keyboardType: TextInputType.emailAddress,
-        ),
-        const SizedBox(height: 16),
-        CustomTextFormField(
-          labelText: "PASSWORD",
-          controller: passwordController,
-          isPassword: true,
-          obscureText: true,
-        ),
-      ],
+    return Form(
+      key: formKey,
+      child: Column(
+        children: [
+          CustomTextFormField(
+            labelText: "USERNAME",
+            controller: usernameController,
+            keyboardType: TextInputType.emailAddress,
+          ),
+          const SizedBox(height: 16),
+          CustomTextFormField(
+            labelText: "ADDRESS",
+            controller: addressController,
+            isPassword: true,
+            obscureText: true,
+          ),
+        ],
+      ),
     );
   }
 
   void _onLoginWithGoogle() {}
 
-  void _onLogin() {
-    context.go(RoutePath.home);
+  void _onLogin() async {
+    if (!(formKey.currentState?.validate() ?? true)) return;
+
+    Modal.showLoadingDialog(context, keyLoader);
+
+    final response = await AuthApi().login(
+      username: usernameController.text,
+      address: addressController.text,
+    );
+
+    Navigator.of(keyLoader.currentContext!, rootNavigator: true).pop();
+
+    if (response) {
+      context.go(RoutePath.home);
+    }
+
+    ///
+    else {
+      Modal.showSnackBar(
+        context,
+        text: ErrorMessage.default0,
+        snackbarType: SnackbarType.danger,
+      );
+    }
   }
 
   void _onGotoRegister() {

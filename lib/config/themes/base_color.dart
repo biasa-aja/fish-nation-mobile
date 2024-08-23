@@ -34,6 +34,38 @@ base class BaseColor {
     },
   );
 
+  static const int _redPrimaryValue = 0xFFDC3545;
+  static const MaterialColor red = MaterialColor(
+    _redPrimaryValue,
+    <int, Color>{
+      100: Color(0xFFF8D7DA),
+      200: Color(0xFFF1AEB5),
+      300: Color(0xFFEA868F),
+      400: Color(0xFFE35D6A),
+      500: Color(_redPrimaryValue),
+      600: Color(0xFFB02A37),
+      700: Color(0xFF842029),
+      800: Color(0xFF58151C),
+      900: Color(0xFF2C0B0E),
+    },
+  );
+
+  static const int _yellowPrimaryValue = 0xFFFFC107;
+  static const MaterialColor yellow = MaterialColor(
+    _yellowPrimaryValue,
+    <int, Color>{
+      100: Color(0xFFFFF3CD),
+      200: Color(0xFFFFE69C),
+      300: Color(0xFFFFDA6A),
+      400: Color(0xFFFFCD39),
+      500: Color(_yellowPrimaryValue),
+      600: Color(0xFFCC9A06),
+      700: Color(0xFF997404),
+      800: Color(0xFF664D03),
+      900: Color(0xFF332701),
+    },
+  );
+
   static const int _greenPrimaryValue = 0xFF198754;
   static const MaterialColor green = MaterialColor(
     _greenPrimaryValue,

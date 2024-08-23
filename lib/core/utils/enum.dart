@@ -5,3 +5,5 @@ enum FishingGuide { guide0, guide1, guide2 }
 enum FishingState { idle, fishing, strike }
 
 enum FishingCatchState { green, yellow, red }
+
+enum SnackbarType { success, danger, warning }

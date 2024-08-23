@@ -19,7 +19,7 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final usernameController = TextEditingController();
   final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  final addressController = TextEditingController();
 
   @override
   void initState() {
@@ -79,7 +79,7 @@ class _RegisterPageState extends State<RegisterPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Text(
-                  "Don't have an account? ",
+                  "Already have an account? ",
                 ).gs14m().greyColor(),
                 GestureDetector(
                   onTap: () => _onGotoLogin(),
@@ -134,15 +134,15 @@ class _RegisterPageState extends State<RegisterPage> {
           controller: usernameController,
         ),
         const SizedBox(height: 16),
+        // CustomTextFormField(
+        //   labelText: "EMAIL",
+        //   controller: emailController,
+        //   keyboardType: TextInputType.emailAddress,
+        // ),
+        // const SizedBox(height: 16),
         CustomTextFormField(
-          labelText: "EMAIL",
-          controller: emailController,
-          keyboardType: TextInputType.emailAddress,
-        ),
-        const SizedBox(height: 16),
-        CustomTextFormField(
-          labelText: "PASSWORD",
-          controller: passwordController,
+          labelText: "ADDRESS",
+          controller: addressController,
           isPassword: true,
           obscureText: true,
         ),

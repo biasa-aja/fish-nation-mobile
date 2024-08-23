@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:example_fish_fortune/data/models/detail_profile_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPref {
@@ -21,6 +22,19 @@ class SharedPref {
   Future<void> reload() async {
     await _sharedPrefs.reload();
   }
+
+  static DetailProfileResponse? get detailProfileResponse {
+    try {
+      return DetailProfileResponse.fromJson(
+          jsonDecode(_sharedPrefs.getString(_keyDetailProfile) ?? ''));
+    } catch (e) {
+      return null;
+    }
+  }
+
+  static set detailProfileResponse(DetailProfileResponse? value) {
+    _sharedPrefs.setString(_keyDetailProfile, jsonEncode(value?.toJson()));
+  }
 }
 
-const String _keySignIn = "sign_in";
+const String _keyDetailProfile = "detail_profile";
