@@ -13,7 +13,7 @@ class FishingApi {
         "${Constant.BASE_URL}/fishing/v1",
         options: Options(
           headers: {
-            "Authorization": Constant.TOKEN_AUTH_DEFAULT,
+            "address": Constant.TOKEN_AUTH_DEFAULT,
           },
         ),
       );

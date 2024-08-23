@@ -13,7 +13,7 @@ class HomeApi {
         "https://h3d56-kaaaa-aaaag-qkfqq-cai.raw.icp0.io/collection/v1/recent",
         options: Options(
           headers: {
-            "Authorization": Constant.TOKEN_AUTH_DEFAULT,
+            "address": Constant.TOKEN_AUTH_DEFAULT,
           },
         ),
       );
