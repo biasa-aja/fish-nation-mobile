@@ -1,6 +1,6 @@
 import 'package:example_fish_fortune/config/routes/route_path.dart';
 import 'package:example_fish_fortune/core/extensions/text_extension.dart';
-import 'package:example_fish_fortune/presentation/widgets/google_button.dart';
+import 'package:example_fish_fortune/presentation/widgets/metamask_button.dart';
 import 'package:example_fish_fortune/presentation/widgets/custom_appbar.dart';
 import 'package:example_fish_fortune/presentation/widgets/custom_text_form_field.dart';
 import 'package:example_fish_fortune/presentation/widgets/main_button.dart';
@@ -52,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
                         .gs14m()
                         .greyColor(),
                     const SizedBox(height: 24),
-                    GoogleButton(onTap: _onLoginWithGoogle),
+                    MetamaskButton(onTap: _onLoginWithGoogle),
                     const SizedBox(height: 24),
                     _buildOr(),
                     const SizedBox(height: 24),

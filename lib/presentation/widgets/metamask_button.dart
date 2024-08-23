@@ -5,9 +5,9 @@ import 'package:example_fish_fortune/presentation/widgets/main_button.dart';
 import 'package:flutter/material.dart';
 import 'package:svg_flutter/svg.dart';
 
-class GoogleButton extends StatelessWidget {
+class MetamaskButton extends StatelessWidget {
   final void Function() onTap;
-  const GoogleButton({
+  const MetamaskButton({
     super.key,
     required this.onTap,
   });
@@ -25,9 +25,12 @@ class GoogleButton extends StatelessWidget {
         customText: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SvgPicture.asset(Assets.icGoogle),
+            SizedBox.square(
+              dimension: 28,
+              child: Image.asset(Assets.metamask),
+            ),
             const SizedBox(width: 8),
-            const Text("GOOGLE").cd16b().blackColor(),
+            const Text("METAMASK").cd16b().blackColor(),
           ],
         ),
         onTap: onTap,

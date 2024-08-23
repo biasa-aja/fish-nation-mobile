@@ -34,6 +34,7 @@ base class Assets {
   static const String strike = "assets/images/strike.png";
   static const String tryAgain = "assets/images/try-again.png";
   static const String fishCatched = "assets/images/fish-catched.png";
+  static const String metamask = "assets/images/metamask.png";
 
   /// jsons
   static const String iphoneLottie = "assets/jsons/phone-lottie.json";
