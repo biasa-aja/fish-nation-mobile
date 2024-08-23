@@ -204,10 +204,12 @@ class _FishingPageState extends State<FishingPage> {
     timer = Timer.periodic(
       const Duration(seconds: 2),
       (timer) async {
-        final image = await cameraController.takePicture();
+        final image =
+            await Helper.compressImage(await cameraController.takePicture());
+
         takedPicture = image;
 
-        waterDetection(image);
+        waterDetection(image ?? XFile(""));
       },
     );
   }

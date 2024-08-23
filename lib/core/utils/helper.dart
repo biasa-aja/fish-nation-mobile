@@ -1,6 +1,9 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image/image.dart' as img;
 
 class Helper {
@@ -24,5 +27,39 @@ class Helper {
     //   }
     // }
     return convertedBytes.buffer.asUint8List();
+  }
+
+  static Future<XFile?> compressImage(XFile? file) async {
+    log("size then : ${await file?.length()}");
+
+    final filePath = file?.path ?? "";
+    final lastIndex = filePath.lastIndexOf(RegExp(r'.png|.jp'));
+    final splitted = filePath.substring(0, (lastIndex));
+    final outPath = "${splitted}_out${filePath.substring(lastIndex)}";
+
+    if (lastIndex == filePath.lastIndexOf(RegExp(r'.png'))) {
+      final compressedImage = await FlutterImageCompress.compressAndGetFile(
+          filePath, outPath,
+          minWidth: 1000,
+          minHeight: 1000,
+          quality: 70,
+          format: CompressFormat.png);
+
+      log("size now : ${await compressedImage?.length()}");
+
+      return compressedImage;
+    } else {
+      final compressedImage = await FlutterImageCompress.compressAndGetFile(
+        filePath,
+        outPath,
+        minWidth: 1000,
+        minHeight: 1000,
+        quality: 70,
+      );
+
+      log("size now : ${await compressedImage?.length()}");
+
+      return compressedImage;
+    }
   }
 }
