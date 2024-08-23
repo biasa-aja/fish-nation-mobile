@@ -2,15 +2,15 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:example_fish_fortune/core/utils/constant.dart';
-import 'package:example_fish_fortune/data/models/droprate_response.dart';
+import 'package:example_fish_fortune/data/models/recent_item_response.dart';
 
-class FishingApi {
+class HomeApi {
   final Dio _dio = Dio();
 
-  Future<DroprateResponse?> getDropRate() async {
+  Future<List<RecentItemResponse>> getRecentList() async {
     try {
       final response = await _dio.post(
-        "${Constant.BASE_URL}/fishing/v1",
+        "https://h3d56-kaaaa-aaaag-qkfqq-cai.raw.icp0.io/collection/v1/recent",
         options: Options(
           headers: {
             "Authorization": Constant.TOKEN_AUTH_DEFAULT,
@@ -19,11 +19,13 @@ class FishingApi {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        return DroprateResponse.fromJson(response.data["data"]);
+        final data = response.data["data"] as List?;
+
+        return data?.map((e) => RecentItemResponse.fromJson(e)).toList() ?? [];
       }
     } catch (e) {
-      log("error droprate : $e");
+      log("error recent : $e");
     }
-    return null;
+    return [];
   }
 }
