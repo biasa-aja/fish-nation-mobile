@@ -31,6 +31,11 @@ class AuthApi {
 
       if (username == "dafapramudya7@gmail.com" &&
           address == "0xa69633468ac1c0b38dffe23d5cf781a9b96c2293") {
+        SharedPref.detailProfileResponse = DetailProfileResponse(
+          address: "0xa69633468ac1c0b38dffe23d5cf781a9b96c2293",
+          username: "dafapramudya7@gmail.com",
+        );
+
         return true;
       }
     } catch (e) {
